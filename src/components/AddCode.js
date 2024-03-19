@@ -22,6 +22,7 @@ const AddCode = observer(({ onAddCode }) => {
         <input
           type="text"
           name='codeName'
+          required
           value={formData.codeName}
           onChange={onChangeInput}
           placeholder="Name of the app"
@@ -29,11 +30,14 @@ const AddCode = observer(({ onAddCode }) => {
         <input
           type="text"
           name='icon'
+          required
           value={formData.icon}
           onChange={onChangeInput}
           placeholder="Icon"
         />
-        <button type="submit">Add</button>
+        <button type="submit"
+        disabled={!formData.codeName || !formData.icon}
+        >Add</button>
       </form>
     </div>
   );

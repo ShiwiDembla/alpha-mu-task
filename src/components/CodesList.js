@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { AiOutlinePlus } from "react-icons/ai";
 import { observer } from 'mobx-react';
 import { appStore } from '../mobx/mobx-store'; 
+import { CircularProgressbar } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
 
 import './CodesList.css';
 
@@ -31,8 +33,15 @@ const CodesList = observer(() => {
             <div className='code-text'>
               <p> {item.codeName}</p>
               <p> {item.code}</p>
+
             </div>
-            <p> {item.timer}</p>
+            {/* <p> {item.timer}</p> */}
+            <div className='progress-bar'>
+              <CircularProgressbar value={item.timer} maxValue={60} text={`${item.timer}s`} />
+            </div>
+
+
+            
           </li>
         )) : "No codes"}
       
