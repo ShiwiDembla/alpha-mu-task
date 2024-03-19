@@ -1,27 +1,23 @@
 import React, { useState } from 'react';
-import {  BrowserRouter, Route , Routes} from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom'; 
 import CodesList from './components/CodesList';
 import AddCode from './components/AddCode';
 
 function App() {
- 
-  return (
- 
-  <BrowserRouter>
-  <Routes>
-    <Route 
-    path="/"
-    element={<CodesList />}
-  />
-   <Route 
-    path="/add"
-    element={<AddCode />}
-  />
-  </Routes>
-  </BrowserRouter>
+  const [codes, setCodes] = useState([]); 
 
+  const handleNewCode = (newCode) => {
+    setCodes([...codes, newCode]);
+  };
+
+  return (
+    <BrowserRouter> 
+      <Routes>
+        <Route path="/" element={<CodesList codes={codes} setCodes={setCodes} />} />
+        <Route path="/add" element={<AddCode onAddCode={handleNewCode} />} /> 
+      </Routes>
+    </BrowserRouter>
   );
 }
 
 export default App;
-
