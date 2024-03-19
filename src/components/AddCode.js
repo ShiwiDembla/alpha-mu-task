@@ -1,62 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { generateCode } from './constants/GenerateCode';
+import { observer } from 'mobx-react';
+import { addCodeStore } from '../mobx/mobx-addcode';
 
-const AddCode = ({ onAddCode }) => {
-  const [codes, setCodes] = useState(() => [
-    {
-      id: 1,
-      codeName: 'Default',
-      icon: 'Default Icon',
-      timer: 60,
-      code: generateCode()
-    }
-  ]);
-
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      setCodes(prevCodes => (
-        prevCodes.map(code => {
-          if (code.timer > 0) {
-            return { ...code, timer: code.timer - 1 };
-          } else {
-            return { ...code, code: generateCode(), timer: 60 };
-          }
-        })
-      ));
-    }, 1000);
-  
-    return () => clearInterval(intervalId);
-  }, []);
-  
-
-  const [formData, setFormData] = useState({ // State for form inputs
-    codeName: '',
-    icon: '',
-    timer: 60
-  });
-
+const AddCode = observer(({ onAddCode }) => {
   const navigate = useNavigate();
+  const { formData } = addCodeStore;
 
   const onChangeInput = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    addCodeStore.onChangeInput(e);
   };
 
   const addCode = (e) => {
     e.preventDefault();
-    const newCode = {
-      id: codes.length + 1,
-      ...formData,
-      code: generateCode(),
-      timer: parseInt(formData.timer, 10) 
-    };
-    setCodes([...codes, newCode]);
-    setFormData({ codeName: '', icon: '', timer: 60 });
-    onAddCode(newCode); // Pass the newly added code to the parent component
-    navigate('/'); // Navigate to the home page
+    addCodeStore.addCode(onAddCode, navigate); 
   };
 
   return (
@@ -65,7 +22,7 @@ const AddCode = ({ onAddCode }) => {
         <input
           type="text"
           name='codeName'
-          value={formData.codeName} // Bind to form state
+          value={formData.codeName}
           onChange={onChangeInput}
           placeholder="Name of the app"
         />
@@ -80,6 +37,6 @@ const AddCode = ({ onAddCode }) => {
       </form>
     </div>
   );
-};
+});
 
 export default AddCode;

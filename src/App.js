@@ -1,24 +1,24 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'; 
 import CodesList from './components/CodesList';
 import AddCode from './components/AddCode';
 
-function App() {
-  const [codes, setCodes] = useState([]); 
+import { appStore } from './mobx/mobx-store'; 
 
-  //callback via state lifting
-  const handleNewCode = (newCode) => {
-    setCodes([...codes, newCode]);
+function App() {
+  const handleAddCode = (newCode) => {
+    console.log("New code added:", newCode);
   };
 
   return (
-    <BrowserRouter> 
+    <BrowserRouter>
       <Routes>
-        <Route path="/" element={<CodesList codes={codes} setCodes={setCodes} />} />
-        <Route path="/add" element={<AddCode onAddCode={handleNewCode} />} /> 
+        <Route path="/" element={<CodesList store={appStore} />} />
+        <Route path="/add" element={<AddCode store={appStore} onAddCode={handleAddCode} />} />
       </Routes>
     </BrowserRouter>
   );
 }
+
 
 export default App;
