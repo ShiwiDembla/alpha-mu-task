@@ -1,8 +1,48 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
 li{
     list-style-type: none;
     padding: 10px;
     margin: 0;
     display: flex;
     flex-direction: row;
+    background-color: azure;
     justify-content: space-between;
+}
+
+header{
+    display: flex;
+    flex-direction: row;
+    background-color: antiquewhite;
+    box-shadow: 0 0 10px 0;
+    height: 100px;
+    /* width: 100%; */
+    padding:  20px;
+    justify-content: space-between;
+    align-items: center;
+    /* padding: 10px; */
+    margin: 0;
+}
+
+button{
+    padding: 20px;
+   
+    /* margin: 10px; */
+    background-color: gray;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+
+}
+.code-text{
+    font-size: 20px;
+    font-weight: bold;
+    flex-direction: column;
+}
+
+li{
+
 }

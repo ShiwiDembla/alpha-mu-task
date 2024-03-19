@@ -6,6 +6,7 @@ import AddCode from './components/AddCode';
 function App() {
   const [codes, setCodes] = useState([]); 
 
+  //callback via state lifting
   const handleNewCode = (newCode) => {
     setCodes([...codes, newCode]);
   };

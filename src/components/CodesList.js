@@ -2,6 +2,11 @@
 import React, {useEffect} from 'react'; 
 import { generateCode } from './constants/GenerateCode';
 import { useNavigate } from 'react-router-dom';
+import { AiOutlinePlus } from "react-icons/ai";
+
+import './CodesList.css';
+
+
 const CodesList = ({ codes, setCodes }) => {
   const navigate = useNavigate();
 
@@ -22,15 +27,20 @@ useEffect(() => {
 
   return (
     <div>
+      <header>
       <h1>Codes List</h1>
-      <button onClick={()=>navigate('/add')}> Add</button>
+      <button onClick={()=>navigate('/add')}> <AiOutlinePlus/></button>
+      </header>
       <ul>
         {codes ? codes.map(item => (
           <li key={item.id}>
-            <p>Code Name: {item.codeName}</p>
-            <p>Icon: {item.icon}</p>
-            <p>Timer: {item.timer}</p>
-            <p>Code: {item.code}</p>
+            <p>{item.icon}</p>
+            <div className='code-text'>
+            <p> {item.codeName}</p>
+            <p> {item.code}</p>
+            </div>
+            <p> {item.timer}</p>
+            
           </li>
         )) : "No codes"}
       </ul>
