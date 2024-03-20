@@ -36,7 +36,7 @@ const AddCode = observer(({ onAddCode }) => {
           placeholder="Icon"
         />
         <button type="submit"
-        disabled={!formData.codeName || !formData.icon}
+        disabled={formData.codeName.trim() && formData.icon.trim() ? false : true}
         >Add</button>
       </form>
     </div>
