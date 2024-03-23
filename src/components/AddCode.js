@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import { addCodeStore } from '../mobx/mobx-addcode';
+import './AddCode.css';
 
 const AddCode = observer(({ onAddCode }) => {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ const AddCode = observer(({ onAddCode }) => {
 
   const addCode = (e) => {
     e.preventDefault();
-    addCodeStore.addCode(onAddCode, navigate); 
+    addCodeStore.addCode(onAddCode, navigate);
   };
 
   return (
@@ -33,10 +34,12 @@ const AddCode = observer(({ onAddCode }) => {
           required
           value={formData.icon}
           onChange={onChangeInput}
-          placeholder="Icon"
+          placeholder="Icon URL"
         />
         <button type="submit"
-        disabled={formData.codeName.trim() && formData.icon.trim() ? false : true}
+          disabled={formData.codeName.trim()
+            && formData.icon.trim()
+            ? false : true}
         >Add</button>
       </form>
     </div>

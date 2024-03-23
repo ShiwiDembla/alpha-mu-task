@@ -1,6 +1,6 @@
 import { observable, action, makeObservable } from 'mobx';
 import { generateCode } from '../components/constants/GenerateCode';
-import { appStore } from './mobx-store'; // Import appStore
+import { appStore } from './mobx-store';
 
 export class AddCodeStore {
   formData = {
@@ -14,7 +14,7 @@ export class AddCodeStore {
       formData: observable,
       setFormData: action,
       onChangeInput: action,
-      addCode: action
+      addCode: action,
     });
   }
 
@@ -28,19 +28,20 @@ export class AddCodeStore {
 
   addCode(onAddCode, navigate) {
     const newCode = {
-      id: appStore.codes.length + 1, 
+      id: appStore.codes.length + 1,
       ...this.formData,
       code: generateCode(),
-      timer: parseInt(this.formData.timer, 10) 
+      timer: parseInt(this.formData.timer, 10)
     };
-    const updatedCodes = [...appStore.codes, newCode]; 
-    appStore.setCodes(updatedCodes); 
+    const updatedCodes = [...appStore.codes, newCode];
+    appStore.setCodes(updatedCodes);
     this.setFormData('codeName', '');
     this.setFormData('icon', '');
     this.setFormData('timer', 60);
     onAddCode(newCode);
     navigate('/');
   }
+
 }
 
 export const addCodeStore = new AddCodeStore();
