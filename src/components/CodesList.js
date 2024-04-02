@@ -3,27 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { AiOutlinePlus } from "react-icons/ai";
 import { observer } from 'mobx-react';
 import { appStore } from '../mobx/mobx-store';
-import { CircularProgressbar } from 'react-circular-progressbar';
-import 'react-circular-progressbar/dist/styles.css';
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-
 import './CodesList.css';
 
 const CodesList = observer(() => {
   const navigate = useNavigate();
-
-  const onDragEnd = (result) => {
-    if (!result.destination) return;
-
-    const items = Array.from(appStore.codes);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
-
-    appStore.setCodes(items);
-  };
-
+  const [draggedIndex, setDraggedIndex] = useState(null);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -33,6 +17,21 @@ const CodesList = observer(() => {
     return () => clearInterval(intervalId);
   }, []);
 
+  const handleDragStart = (e, index) => {
+    e.dataTransfer.setData('index', index);
+    setDraggedIndex(index);
+  };
+
+  const handleDragOver = (e, index) => {
+    e.preventDefault();
+    if (draggedIndex === null || index === draggedIndex) return;
+    const codesCopy = [...appStore.codes];
+    const draggedItem = codesCopy.splice(draggedIndex, 1)[0];
+    codesCopy.splice(index, 0, draggedItem);
+    appStore.setCodes(codesCopy);
+    setDraggedIndex(index);
+  };
+
   return (
     <div>
       <header>
@@ -40,64 +39,48 @@ const CodesList = observer(() => {
         <button onClick={() => navigate('/add')}> <AiOutlinePlus /></button>
       </header>
 
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="codes">
-          {(provided) => (
-            <div ref={provided.innerRef} {...provided.droppableProps}>
-              {appStore.codes.map((codes, index) => (
-                <Draggable
-                  key={codes.id}
-                  draggableId={codes.id.toString()}
-                  index={index}
-                >
-                  {(provided) => (
-                    <>
-                      <li
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        ref={provided.innerRef}
-                      >
-
-                        <img src={codes.icon} alt={codes.codeName} className='icon' />
-
-
-                        <div className='text'>
-                          <p>{codes.codeName}</p>
-                          <p className='code-text'> {codes.code.substring(0, 3)} {codes.code.substring(3)}   </p>
-
-                        </div>
-
-                        <div className='progress-bar'>
-                          <CircularProgressbar value={codes.timer} maxValue={60} text={`${codes.timer}s`} />
-                        </div>
-                      </li>
-                    </>
-
-                  )}
-
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
-
-
       <div>
-        {appStore.codes.map((codes, index) => (
-          <div className='demo'>
-            <div className='progress-bar'>
-              <CircularProgressbar value={codes.timer} maxValue={60} text={`${codes.timer}s`} />
-            </div>
-          </div>
-        ))}
+        <ul>
+          {appStore.codes.map((code, index) => (
+            <li
+              key={code.id}
+              draggable
+              className='draggable'
+              onDragStart={(e) => handleDragStart(e, index)}
+              onDragOver={(e) => handleDragOver(e, index)}
+              onDrop={(e) => handleDragOver(e, index)}
+            >
+              <img src={code.icon} alt={code.codeName} className='icon' />
+              <div className='text'>
+                <p>{code.codeName.charAt(0).toUpperCase()  + code.codeName.slice(1)}</p>
+                <p className='code-text'> {code.code.substring(0, 3)} {code.code.substring(3)} </p>
+              </div>
+              <div className='progress-bar'>
+              
+                <svg
+                  width="60" height="60" viewBox="0 0 250 250"
+                  className="circular-progress" style={{ "--progress": code.timer }}
+                >
+                  
+                  <circle className="bg"></circle>
+                  <circle className="fg">
+               
+                  </circle>
+                  <text
+                    x="50%"
+                    y="50%"
+                    dominantBaseline="middle"
+                    textAnchor="middle"
+                  >{code.timer}</text>
+                  
+                </svg>
+              </div>
+            </li>
+          ))}
+        </ul>
       </div>
-
-
     </div>
   );
 });
 
 export default CodesList;
-

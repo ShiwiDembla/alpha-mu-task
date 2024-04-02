@@ -39,7 +39,9 @@ header {
   margin-bottom: 20px;
 }
 
-
+.draggable{
+  cursor: grab;
+}
 
 header button {
   background-color: #007bff;
@@ -102,3 +104,39 @@ li img {
 .demo{
   display: none;
 }
+
+.circular-progress {
+  --size: 250px;
+  --half-size: calc(var(--size) / 2);
+  --stroke-width: 20px;
+  --radius: calc((var(--size) - var(--stroke-width)) / 2);
+  --circumference: calc(var(--radius) * 2 * 3.1416); /* Use 2 * pi for the circumference */
+  --dash: calc((var(--progress) * var(--circumference)) / 60); /* Adjust for maximum value of 60 */
+}
+.circular-progress text {
+  font-size: 70px; 
+  font-weight: bold; /* Or a numerical value like 600, 700 */
+  fill: gray;  
+} 
+
+.circular-progress circle {
+  cx: var(--half-size);
+  cy: var(--half-size);
+  r: var(--radius);
+  stroke-width: var(--stroke-width);
+  fill: none;
+  stroke-linecap: round;
+}
+
+.circular-progress circle.bg {
+  stroke: #ddd;
+}
+
+.circular-progress circle.fg {
+  transform: rotate(-90deg);
+  transform-origin: var(--half-size) var(--half-size);
+  stroke-dasharray: var(--dash) calc(var(--circumference) - var(--dash));
+  transition: stroke-dasharray 0.3s linear 0s;
+  stroke: #5394fd;
+}
+
