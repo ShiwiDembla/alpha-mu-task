@@ -5,10 +5,15 @@ import CodesList from "./CodesList";
 import { BrowserRouter } from "react-router-dom";
 
 
+const RenderWithRouter = (ui) => {
+    return render(ui, { wrapper: BrowserRouter });
+  };
+
 //test for input field
 describe('AddCode', () => {
     test("renders correctly", ()=>{
-        render(<AddCode onAddCode={CodesList.onAddCode}/>,{wrapper:BrowserRouter});
+        RenderWithRouter(<AddCode onAddCode={CodesList.onAddCode}/>);
+        
 
 
         const nameInput = screen.getByLabelText(/codeName/i)

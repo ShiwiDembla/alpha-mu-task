@@ -7,13 +7,17 @@ import { AppStore, appStore } from '../mobx/mobx-store';
 import CodesList from './CodesList';
 import App from '../App';
 
+const RenderWithRouter = (ui) => {
+  return render(ui, { wrapper: BrowserRouter });
+};
+
 describe('CodesList component', () => {
   test('renders without crashing', () => {
-    render(<BrowserRouter><CodesList /></BrowserRouter>);
+    RenderWithRouter(<CodesList />);
   });
 
   test('renders add button', () => {
-    render(<BrowserRouter><CodesList /></BrowserRouter>);
+    RenderWithRouter(<CodesList />);
 
     const heading = screen.getByRole("heading")
     expect(heading).toBeInTheDocument()
@@ -31,7 +35,7 @@ describe('CodesList component', () => {
   });
 
   test('renders no codes found message when no codes are present in the store', async () => {
-    render(<BrowserRouter><CodesList /></BrowserRouter>);
+    RenderWithRouter(<CodesList />);
     const noCodesMessage = screen.getByTestId(/empty/i);
     expect(noCodesMessage).toBeInTheDocument();
   });
@@ -42,7 +46,7 @@ describe('CodesList component', () => {
     ];
     appStore.setCodes(mockCodes);
 
-    render(<BrowserRouter><CodesList appStore={appStore} /></BrowserRouter>);
+    RenderWithRouter(<CodesList />);
 
     const list = screen.getByRole('list');
     expect(list).toBeInTheDocument();
@@ -53,7 +57,6 @@ describe('CodesList component', () => {
       const listItems = screen.getAllByTestId('listitem');
       expect(listItems.length).toBe(1);
     });
-
 
     const codeNames = screen.getAllByTestId('name');
     const icon = screen.getAllByTestId('icon');
@@ -77,9 +80,6 @@ describe('CodesList component', () => {
   });
 
 
-
-
-
   test('timer updates correctly', async () => {
 
     const mockCodes = [
@@ -90,8 +90,7 @@ describe('CodesList component', () => {
 
     appStore.setCodes(mockCodes);
 
-    render(<BrowserRouter><CodesList /></BrowserRouter>);
-
+     RenderWithRouter(<CodesList />);
 
     const timerElements = screen.getAllByTestId('timer');
 
@@ -99,21 +98,17 @@ describe('CodesList component', () => {
     expect(timerElements[1]).toHaveTextContent('0');
     expect(timerElements[2]).toHaveTextContent('60');
 
-
     await act(async () => {
       jest.advanceTimersByTime(1000);
     });
-
 
     expect(timerElements[0]).toHaveTextContent('29');
     expect(timerElements[1]).toHaveTextContent('0');
     expect(timerElements[2]).toHaveTextContent('59');
 
-
     await act(async () => {
       jest.advanceTimersByTime(30000);
     });
-
 
     expect(timerElements[0]).toHaveTextContent('0');
     expect(timerElements[1]).toHaveTextContent('0');
@@ -126,15 +121,6 @@ describe('CodesList component', () => {
     expect(timerElements[0]).toHaveTextContent('30');
     expect(timerElements[1]).toHaveTextContent('0');
     expect(timerElements[2]).not.toHaveTextContent('90');
-  });
-
-  beforeEach(() => {
-    jest.useFakeTimers();
-  });
-
-  afterEach(() => {
-    // Clear all timers
-    jest.clearAllTimers();
   });
 
 
