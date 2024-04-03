@@ -11,17 +11,16 @@ const AddCode = observer(({ onAddCode }) => {
   const onChangeInput = (e) => {
     addCodeStore.onChangeInput(e);
   };
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const addCode = (e) => {
     e.preventDefault();
-    // addCodeStore.addCode(onAddCode, navigate);
+    addCodeStore.addCode(onAddCode, navigate);
   };
 
   return (
     <div data-testid="add-code">
       <div>
       <form onSubmit={addCode}>
-       
         <input
           type="text"
           name='codeName'
@@ -41,6 +40,7 @@ const AddCode = observer(({ onAddCode }) => {
           placeholder="Icon URL"
         />
         <button type="submit"
+        data-testid = "submit"
           disabled={formData.codeName.trim()
             && formData.icon.trim()
             ? false : true}

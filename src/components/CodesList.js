@@ -6,7 +6,7 @@ import { appStore } from '../mobx/mobx-store';
 import './CodesList.css';
 
 const CodesList = observer(() => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const [draggedIndex, setDraggedIndex] = useState(null);
 
   useEffect(() => {
@@ -33,52 +33,72 @@ const CodesList = observer(() => {
   };
 
   return (
-    <div  data-testid="codes-list">
+    <div data-testid="codes-list">
       <header>
         <h1> 2FA Codes </h1>
-        <button 
-        // onClick={() => navigate('/add')}
-        > <AiOutlinePlus /></button>
+        <button
+          data-testid="add"
+          onClick={() => navigate('/add')}
+        >
+          <AiOutlinePlus />
+        </button>
+
       </header>
 
       <div>
         <ul>
-          {appStore.codes.map((code, index) => (
-            <li
-              key={code.id}
-              draggable
-              className='draggable'
-              onDragStart={(e) => handleDragStart(e, index)}
-              onDragOver={(e) => handleDragOver(e, index)}
-              onDrop={(e) => handleDragOver(e, index)}
-            >
-              <img src={code.icon} alt={code.codeName} className='icon' />
-              <div className='text'>
-                <p>{code.codeName.charAt(0).toUpperCase()  + code.codeName.slice(1)}</p>
-                <p className='code-text'> {code.code.substring(0, 3)} {code.code.substring(3)} </p>
-              </div>
-              <div className='progress-bar'>
-              
-                <svg
-                  width="60" height="60" viewBox="0 0 250 250"
-                  className="circular-progress" style={{ "--progress": code.timer }}
+          {appStore.codes ?
+
+            appStore.codes.length <= 0 ?
+
+              <>
+                <p data-testid="empty"> No codes found</p>
+              </>
+              :
+              appStore.codes.map((code, index) => (
+                <li
+                  key={code.id}
+                  draggable
+                  data-testid="listitem"
+                  aria-label='listitem'
+                  className='draggable'
+                  onDragStart={(e) => handleDragStart(e, index)}
+                  onDragOver={(e) => handleDragOver(e, index)}
+                  onDrop={(e) => handleDragOver(e, index)}
                 >
-                  
-                  <circle className="bg"></circle>
-                  <circle className="fg">
-               
-                  </circle>
-                  <text
-                    x="50%"
-                    y="50%"
-                    dominantBaseline="middle"
-                    textAnchor="middle"
-                  >{code.timer}</text>
-                  
-                </svg>
-              </div>
-            </li>
-          ))}
+                  <img data-testid="icon" src={code.icon} alt={code.codeName} className='icon' />
+                  <div className='text'>
+                    <p data-testid="name">{code.codeName.charAt(0).toUpperCase() + code.codeName.slice(1)}</p>
+                    <p data-testid="code" className='code-text'>{code.code.substring(0, 3)} {code.code.substring(3)}</p>
+                  </div>
+
+                  <div
+                    data-testid="progress-bar"
+                    className='progress-bar'>
+                    <svg
+                      data-testid="progress-svg"
+                      width="60" height="60" viewBox="0 0 250 250"
+                      className="circular-progress" style={{ "--progress": code.timer }}
+                    >
+
+                      <circle className="bg" aria-label='bg-circle'></circle>
+                      <circle className="fg" aria-label='fg-circle'>
+
+                      </circle>
+                      <text
+                        x="50%"
+                        y="50%"
+                        dominantBaseline="middle"
+                        textAnchor="middle"
+                        data-testid="timer"
+                      >{code.timer}</text>
+
+                    </svg>
+                  </div>
+                </li>
+              ))
+
+            : null}
         </ul>
       </div>
     </div>
