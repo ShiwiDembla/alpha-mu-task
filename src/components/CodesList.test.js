@@ -134,3 +134,34 @@ describe('CodesList component', () => {
 
 
 });
+
+
+
+describe('Code List useffect hooks', () => {
+  let clearIntervalMock;
+  let setIntervalMock;
+  let generateNewCodeSpy;
+
+  beforeEach(() => {
+    clearIntervalMock = jest.spyOn(window, 'clearInterval').mockImplementation(() => {});
+    setIntervalMock = jest.spyOn(window, 'setInterval').mockImplementation(() => {});
+    generateNewCodeSpy = jest.spyOn(appStore, 'generateNewCode').mockImplementation(() => {appStore.generateNewCode()});
+  });
+
+  afterEach(() => {
+    clearIntervalMock.mockRestore();
+    setIntervalMock.mockRestore();
+    generateNewCodeSpy.mockRestore();
+  });
+
+  it('should call setInterval with the correct parameters', () => {
+    RenderWithRouter(<CodesList />);
+    expect(setIntervalMock).toHaveBeenCalledWith(expect.any(Function), 1000);
+  });
+
+  it('should call clearInterval when component unmounts', () => {
+    const { unmount } = RenderWithRouter(<CodesList />);
+    unmount();
+    expect(clearIntervalMock).toHaveBeenCalled();
+  });
+});
