@@ -6,7 +6,7 @@ import { appStore } from '../mobx/mobx-store';
 import './CodesList.css';
 
 const CodesList = observer(() => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [draggedIndex, setDraggedIndex] = useState(null);
 
   useEffect(() => {
@@ -33,10 +33,12 @@ const CodesList = observer(() => {
   };
 
   return (
-    <div>
+    <div  data-testid="codes-list">
       <header>
         <h1> 2FA Codes </h1>
-        <button onClick={() => navigate('/add')}> <AiOutlinePlus /></button>
+        <button 
+        // onClick={() => navigate('/add')}
+        > <AiOutlinePlus /></button>
       </header>
 
       <div>

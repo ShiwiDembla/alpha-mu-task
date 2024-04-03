@@ -5,24 +5,27 @@ import { addCodeStore } from '../mobx/mobx-addcode';
 import './AddCode.css';
 
 const AddCode = observer(({ onAddCode }) => {
-  const navigate = useNavigate();
+  
   const { formData } = addCodeStore;
 
   const onChangeInput = (e) => {
     addCodeStore.onChangeInput(e);
   };
-
+  // const navigate = useNavigate();
   const addCode = (e) => {
     e.preventDefault();
-    addCodeStore.addCode(onAddCode, navigate);
+    // addCodeStore.addCode(onAddCode, navigate);
   };
 
   return (
-    <div>
+    <div data-testid="add-code">
+      <div>
       <form onSubmit={addCode}>
+       
         <input
           type="text"
           name='codeName'
+          aria-label='codeName'
           required
           value={formData.codeName}
           onChange={onChangeInput}
@@ -31,6 +34,7 @@ const AddCode = observer(({ onAddCode }) => {
         <input
           type="text"
           name='icon'
+          aria-label='icon'
           required
           value={formData.icon}
           onChange={onChangeInput}
@@ -42,6 +46,8 @@ const AddCode = observer(({ onAddCode }) => {
             ? false : true}
         >Add</button>
       </form>
+    </div>
+
     </div>
   );
 });
